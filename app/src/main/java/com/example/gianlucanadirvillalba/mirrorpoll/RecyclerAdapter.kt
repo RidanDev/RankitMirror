@@ -46,7 +46,7 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    class PollsHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) // campi non nel costruttore
+    class PollsHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
     {
         var textName = itemView?.findViewById(R.id.pollname) as TextView
         var textCandidates = itemView?.findViewById(R.id.candidates) as TextView
