@@ -11,16 +11,16 @@ import java.util.*
 /**
  * Created by gianlucanadirvillalba on 06/10/2017.
  */
-class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.PollsHolder>()
+class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.PollsHolder>(), PollListener
 {
-
-    private lateinit var mContext : Context
+    private lateinit var mContext: Context
     private var mLayoutInflater = LayoutInflater.from(context)
+
     companion object
     {
-        var data : List<Poll> = Collections.emptyList()
+        var data: List<Poll> = Collections.emptyList()
 
-        fun addData(instance : RecyclerAdapter, data : List<Poll>)
+        fun addData(instance: RecyclerAdapter, data: List<Poll>)
         {
             this.data = data
             instance.notifyItemRangeChanged(0, data.size)
@@ -31,8 +31,10 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
     {
         val poll = data[position]
         holder?.textName?.text = poll.name
-        holder?.textVotes?.text = poll.votes
-        //holder?.textCandidates?.text = poll.candidates
+        holder?.textVotes?.text = "voti ${poll.votes}"
+        if (poll.candidates.size == 0) holder?.textCandidates?.text = "nessun candidato"
+        else holder?.textCandidates?.text = poll.candidates.toString()
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PollsHolder
@@ -43,7 +45,12 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
 
     override fun getItemCount(): Int
     {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return data.size
+    }
+
+    override fun onAddPoll(pollArray: ArrayList<Poll>)
+    {
+        addData(this, pollArray)
     }
 
     class PollsHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)

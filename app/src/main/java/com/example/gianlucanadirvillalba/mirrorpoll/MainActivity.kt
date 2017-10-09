@@ -4,15 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
 import com.estimote.coresdk.common.config.EstimoteSDK
 import com.estimote.coresdk.common.requirements.SystemRequirementsChecker
 import com.estimote.sdk.mirror.context.DisplayCallback
@@ -21,15 +16,10 @@ import com.estimote.sdk.mirror.context.Zone
 import com.estimote.sdk.mirror.core.common.exception.MirrorException
 import com.estimote.sdk.mirror.core.connection.Dictionary
 import com.estimote.sdk.mirror.core.connection.MirrorDevice
-import org.json.JSONArray
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity()
 {
-    private lateinit var mRequestQueue: RequestQueue
-    private lateinit var mSendButton: Button
-    private lateinit var mEditPoll: EditText
-    private var pollmap = HashMap<String, String>()
     private lateinit var pollid: String
     private lateinit var pollname: String
     private lateinit var ctxMr: MirrorContextManager
@@ -38,16 +28,31 @@ class MainActivity : AppCompatActivity()
     //private val MIRROR_ID: String = "7ad83a1b886ae2e6321319c38c48fd11"
     private var candidates = ArrayList<String>()
     private lateinit var pattern: String
-    private lateinit var input: String
     private var twice = false
+    private lateinit var mToolbar: android.support.v7.widget.Toolbar
+    private lateinit var mAdapter: RecyclerAdapter
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mLinearLayoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.main_activity2)
         EstimoteSDK.initialize(this, APP_ID, APP_TOKEN)
         EstimoteSDK.enableDebugLogging(true)
         setUpUI()
+        setUpRecyclerView()
+        RequestAPI.getPolls(mAdapter)
+    }
+
+    //TODO aggiungere swype to refresh per aggiornare i dati della recycler view
+    private fun setUpRecyclerView()
+    {
+        mAdapter = RecyclerAdapter(this)
+        mRecyclerView = findViewById(R.id.poll_list) as RecyclerView
+        mLinearLayoutManager = LinearLayoutManager(this)
+        mRecyclerView.layoutManager = mLinearLayoutManager
+        mRecyclerView.adapter = mAdapter
     }
 
     private fun setUpMirror()
@@ -96,79 +101,11 @@ class MainActivity : AppCompatActivity()
 
     }
 
-    private fun getCandidates()
-    {
-        mRequestQueue = VolleySingleton.instance.requestQueue
-        val request = JsonArrayRequest(Request.Method.GET,
-                UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_CANDIDATES + UrlEndPoints.URL_CHAR_QUESTION + UrlEndPoints.POLL_ID + pollid,
-                null, Response.Listener<JSONArray>
-        { response ->
-            candidates = Parser.parseJsonGetCandidates(response)
-            getPattern()
-        }, Response.ErrorListener
-        { error ->
-            Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show()
-        })
-        mRequestQueue.add(request)
-    }
-
-    private fun getPattern()
-    {
-        mRequestQueue = VolleySingleton.instance.requestQueue
-        val request = JsonObjectRequest(Request.Method.GET,
-                UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_RESULTS + UrlEndPoints.URL_CHAR_QUESTION + UrlEndPoints.POLL_ID + pollid,
-                null, Response.Listener<JSONObject>
-        { response ->
-            pattern = Parser.parseJsonGetPattern(response)
-            setUpMirror()
-
-        }, Response.ErrorListener
-        { error ->
-            Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show()
-        })
-        mRequestQueue.add(request)
-    }
-
     private fun setUpUI()
     {
-        mEditPoll = findViewById(R.id.edit_pollname) as EditText
-        mSendButton = findViewById(R.id.button_invia) as Button
-        mSendButton.setOnClickListener {
-            input = mEditPoll.text.toString()
-            if (input.isEmpty())
-                Toast.makeText(this, "No input found", Toast.LENGTH_SHORT).show()
-            else setUpGetPollsRequest()
-        }
-    }
-
-    //TODO le richieste vanno fatte in un thread secondario
-    private fun setUpGetPollsRequest()
-    {
-        mRequestQueue = VolleySingleton.instance.requestQueue
-        val request = JsonArrayRequest(Request.Method.GET,
-                UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_POLLS, null, Response.Listener<JSONArray>
-        { response ->
-            Toast.makeText(this, "Response received from: ${UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_POLLS}", Toast.LENGTH_SHORT).show()
-            pollmap = Parser.parseJsonGetPolls(response)
-            for ((k, v) in pollmap)
-            {
-                if (input == k)
-                {
-                    pollname = k
-                    pollid = v
-                    getCandidates()
-                    break
-                } else if (!pollmap.containsKey(input))
-                {
-                    Toast.makeText(this, "$input Not Found!", Toast.LENGTH_SHORT).show()
-                    break
-                }
-            }
-        }, Response.ErrorListener
-        { error ->
-            Toast.makeText(MyApplication.appContext, error.toString(), Toast.LENGTH_LONG).show()
-        })
-        mRequestQueue.add(request)
+        mToolbar = findViewById(R.id.app_bar) as android.support.v7.widget.Toolbar
+        setSupportActionBar(mToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onResume()

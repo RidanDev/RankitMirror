@@ -9,5 +9,8 @@ class Poll
     lateinit var id : String
     lateinit var votes : String
     lateinit var pattern : String
-    lateinit var candidates : ArrayList<String>
+    var candidates = ArrayList<String>()
+
+    override fun toString(): String = "name: $name, id: $id, candidates: ${candidates.size}"
+
 }

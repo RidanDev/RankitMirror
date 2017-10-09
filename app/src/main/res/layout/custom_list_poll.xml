@@ -11,18 +11,18 @@
         android:layout_height="wrap_content"
         android:text="Pollname"/>
 
-    <TextView
+    <!--TextView
         android:id="@+id/create"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/pollname"
-        android:text="created by"/>
+        android:text="created by"/-->
 
     <TextView
         android:id="@+id/candidates"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/create"
+        android:layout_below="@id/pollname"
         android:text="candidates"/>
 
     <TextView
