@@ -1,6 +1,5 @@
 package com.example.gianlucanadirvillalba.mirrorpoll
 
-import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -17,7 +16,7 @@ class Parser
 
         fun parseJsonGetPolls(response: JSONArray, adapter: RecyclerAdapter)
         {
-            Log.d(MyApplication.LOG, "parseJsonGetPolls")
+            //Log.d(MyApplication.LOG, "parseJsonGetPolls")
             var jsonObject: JSONObject
             var i = 0
             while (i < response.length())
@@ -43,7 +42,7 @@ class Parser
                 poll.candidates.add(jsonObject.getString("candname").toString())
                 i++
             }
-            Log.d(MyApplication.LOG, "name:${poll.name} id:${poll.id} votes:${poll.votes} candidates:${poll.candidates}")
+            //Log.d(MyApplication.LOG, "name:${poll.name} id:${poll.id} votes:${poll.votes} candidates:${poll.candidates}")
             adapter.onAddPoll(pollArray)
         }
 

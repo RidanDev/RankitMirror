@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import java.util.*
 
 /**
@@ -43,21 +44,30 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
         return PollsHolder(view)
     }
 
-    override fun getItemCount(): Int
-    {
-        return data.size
-    }
+    override fun getItemCount(): Int = data.size
+
 
     override fun onAddPoll(pollArray: ArrayList<Poll>)
     {
         addData(this, pollArray)
     }
 
-    class PollsHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+    class PollsHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), View.OnClickListener
     {
         var textName = itemView?.findViewById(R.id.pollname) as TextView
         var textCandidates = itemView?.findViewById(R.id.candidates) as TextView
         var textVotes = itemView?.findViewById(R.id.votes) as TextView
+
+        init
+        {
+            itemView?.setOnClickListener(this)
+        }
+
+        override fun onClick(p0: View?)
+        {
+            Toast.makeText(MyApplication.appContext, "Sending poll ${data[adapterPosition].name}", Toast.LENGTH_SHORT).show()
+            MyApplication.sendToMirror(data[adapterPosition])
+        }
     }
 
 }
