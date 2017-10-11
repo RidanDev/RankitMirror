@@ -43,6 +43,7 @@ class Parser
                 i++
             }
             //Log.d(MyApplication.LOG, "name:${poll.name} id:${poll.id} votes:${poll.votes} candidates:${poll.candidates}")
+            //Log.d(MyApplication.LOG, "ParseJsonCandidates")
             adapter.onAddPoll(pollArray)
         }
 

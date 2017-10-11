@@ -25,11 +25,15 @@ class RequestAPI
                     UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_POLLS, null, Response.Listener<JSONArray>
             { response ->
                 Toast.makeText(MyApplication.appContext, "Response received from: ${UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_POLLS}", Toast.LENGTH_SHORT).show()
+                MyApplication.success = true
+                MainActivity.onStopProgress()
                 Parser.parseJsonGetPolls(response, adapter)
 
             }, Response.ErrorListener
             { error ->
                 Toast.makeText(MyApplication.appContext, error.toString(), Toast.LENGTH_LONG).show()
+                MyApplication.success = true
+                //MainActivity.onStopProgress()
             })
             mRequestQueue.add(request)
         }

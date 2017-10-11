@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import java.util.*
 
 /**
  * Created by gianlucanadirvillalba on 06/10/2017.
@@ -19,9 +18,9 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
 
     companion object
     {
-        var data: List<Poll> = Collections.emptyList()
+        var data: ArrayList<Poll> = ArrayList()
 
-        fun addData(instance: RecyclerAdapter, data: List<Poll>)
+        fun addData(instance: RecyclerAdapter, data: ArrayList<Poll>)
         {
             this.data = data
             instance.notifyItemRangeChanged(0, data.size)
@@ -45,7 +44,6 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
     }
 
     override fun getItemCount(): Int = data.size
-
 
     override fun onAddPoll(pollArray: ArrayList<Poll>)
     {
