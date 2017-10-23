@@ -1,12 +1,15 @@
 package com.example.gianlucanadirvillalba.mirrorpoll
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import com.squareup.picasso.Picasso
+
 
 /**
  * Created by gianlucanadirvillalba on 06/10/2017.
@@ -27,13 +30,31 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
         }
     }
 
+    fun addNewData(instance: RecyclerAdapter, newData: Poll)
+    {
+        data.add(newData)
+        instance.notifyItemChanged(0, data.size)
+        instance.notifyDataSetChanged() //aggiunto per non far crashare l'app a quando ho aggiungto lo swiperefreshlayout nel coordinator
+    }
+
     override fun onBindViewHolder(holder: PollsHolder?, position: Int)
     {
         val poll = data[position]
         holder?.textName?.text = poll.name
         holder?.textVotes?.text = "voti ${poll.votes}"
-        if (poll.candidates.size == 0) holder?.textCandidates?.text = "nessun candidato"
-        else holder?.textCandidates?.text = poll.candidates.toString()
+        //if (poll.candidates.size == 0) holder?.textCandidates?.text = "nessun candidato"
+        val candidates = poll.candidates.toString()
+        holder?.textCandidates?.text = candidates.substring(1, candidates.length-1)
+        if (poll.image.isNotEmpty())
+        {
+            Picasso.with(MyApplication.appContext)
+                    .load(poll.image)
+                    .placeholder(ContextCompat.getDrawable(MyApplication.appContext, R.mipmap.ic_mirror))
+                    .resize(140, 140)
+                    .centerInside()
+                    .into(holder?.pollImage)
+        }
+
 
     }
 
@@ -55,6 +76,7 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
         var textName = itemView?.findViewById(R.id.pollname) as TextView
         var textCandidates = itemView?.findViewById(R.id.candidates) as TextView
         var textVotes = itemView?.findViewById(R.id.votes) as TextView
+        var pollImage = itemView?.findViewById(R.id.pollimage) as ImageView
 
         init
         {
@@ -63,8 +85,11 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
 
         override fun onClick(p0: View?)
         {
-            Toast.makeText(MyApplication.appContext, "Sending poll ${data[adapterPosition].name}", Toast.LENGTH_SHORT).show()
-            MyApplication.sendToMirror(data[adapterPosition])
+            //Toast.makeText(MyApplication.appContext, "Sending poll ${data[adapterPosition].name}", Toast.LENGTH_SHORT).show()
+            if (p0?.findViewById(R.id.candidates)?.visibility == View.GONE)
+                p0?.findViewById(R.id.candidates)?.visibility = View.VISIBLE
+            else p0?.findViewById(R.id.candidates)?.visibility = View.GONE
+            //MyApplication.sendToMirror(data[adapterPosition])
         }
     }
 

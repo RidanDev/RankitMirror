@@ -1,35 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp"
+        card_view:cardUseCompatPadding="true">
+
+
+        <ImageView
+
+            android:id="@+id/pollimage"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/ic_mirror"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/pollname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="100dp"
+                android:text="Pollname"
+                android:textColor="#000"
+                android:textSize="18sp"/>
 
-    <TextView
-        android:id="@+id/pollname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Pollname"/>
+            <TextView
+                android:id="@+id/votes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="100dp"
+                android:text="votes"
+                android:textSize="14sp"/>
 
-    <!--TextView
-        android:id="@+id/create"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pollname"
-        android:text="created by"/-->
 
-    <TextView
-        android:id="@+id/candidates"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pollname"
-        android:text="candidates"/>
+            <TextView
+                android:id="@+id/candidates"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="100dp"
+                android:text="candidates"
+                android:textSize="14sp"
+                android:visibility="gone"/>
 
-    <TextView
-        android:id="@+id/votes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/candidates"
-        android:text="votes"/>
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
 
 </RelativeLayout>

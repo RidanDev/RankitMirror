@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.estimote.coresdk.common.config.EstimoteSDK
-import com.estimote.coresdk.common.requirements.SystemRequirementsChecker
 
 class MainActivity : AppCompatActivity()
 {
@@ -19,7 +20,8 @@ class MainActivity : AppCompatActivity()
     private lateinit var mAdapter: RecyclerAdapter
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mLinearLayoutManager: LinearLayoutManager
-    private lateinit var mSwypeRefreshLayout: android.support.v4.widget.SwipeRefreshLayout
+    private lateinit var mSwipeRefreshLayout: android.support.v4.widget.SwipeRefreshLayout
+    private var mCardView : CardView? = null
     private var twice = false
 
     companion object
@@ -43,41 +45,51 @@ class MainActivity : AppCompatActivity()
         EstimoteSDK.enableDebugLogging(true)
         setUpUI()
         setUpRecyclerView()
-        if (savedInstanceState == null) RequestAPI.getPolls(mAdapter)
-        else onStopProgress()
+        if (savedInstanceState == null)
+        {
+            RequestAPI.getPolls(mAdapter)
+            //TaskLoadPoll(mAdapter).execute()
+        } else onStopProgress()
     }
 
     private fun setUpRecyclerView()
     {
         mAdapter = RecyclerAdapter(this)
-        mRecyclerView = findViewById(R.id.poll_list) as RecyclerView
         mLinearLayoutManager = LinearLayoutManager(this)
         mRecyclerView.layoutManager = mLinearLayoutManager
         mRecyclerView.adapter = mAdapter
-        mSwypeRefreshLayout = findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
-        mSwypeRefreshLayout.setOnRefreshListener {
+        mRecyclerView.isNestedScrollingEnabled = false //permette lo scroll fluido
+        //mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
+        mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
+        mSwipeRefreshLayout.setOnRefreshListener {
             Parser.pollArray.clear()
+            RecyclerAdapter.data.clear()
             RequestAPI.getPolls(mAdapter)
             if (MyApplication.success)
             {
-                mSwypeRefreshLayout.isRefreshing = false
+                mSwipeRefreshLayout.isRefreshing = false
                 MyApplication.success = false
             }
         }
+
     }
 
     private fun setUpUI()
     {
-        mToolbar = findViewById(R.id.app_bar) as android.support.v7.widget.Toolbar
+        //mToolbar = findViewById(R.id.app_bar) as android.support.v7.widget.Toolbar
+        mToolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(mToolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false) //non mostrare tasto back
         mProgressBar = findViewById(R.id.loadingPanel)
+        mRecyclerView = findViewById(R.id.poll_list) as RecyclerView
+        mCardView = (findViewById(R.id.card_view) as CardView?)
+        //mCardView?.cardElevation  = 100F
     }
 
     override fun onResume()
     {
         super.onResume()
-        SystemRequirementsChecker.checkWithDefaultDialogs(this)
+        //SystemRequirementsChecker.checkWithDefaultDialogs(this)
     }
 
     override fun onBackPressed()

@@ -33,9 +33,11 @@ class MyApplication : Application()
             get() = instance!!.applicationContext
         val LOG: String = "log"
 
-        var success = false //TODO controllare quando risettare a false
+        var success = false
 
         private lateinit var ctxMr: MirrorContextManager
+
+        var received = true
 
         fun sendToMirror(poll: Poll)
         {

@@ -18,7 +18,7 @@ class RequestAPI
     {
         private lateinit var mRequestQueue: RequestQueue
 
-        fun getPolls(adapter : RecyclerAdapter)
+        fun getPolls(adapter: RecyclerAdapter)
         {
             mRequestQueue = VolleySingleton.instance.requestQueue
             val request = JsonArrayRequest(Request.Method.GET,
@@ -28,6 +28,7 @@ class RequestAPI
                 MyApplication.success = true
                 MainActivity.onStopProgress()
                 Parser.parseJsonGetPolls(response, adapter)
+                //Log.d(MyApplication.LOG, "ja size ${ja.size}")
 
             }, Response.ErrorListener
             { error ->
@@ -38,20 +39,23 @@ class RequestAPI
             mRequestQueue.add(request)
         }
 
-        fun getCandidates(poll : Poll, adapter: RecyclerAdapter)
-        {
-            mRequestQueue = VolleySingleton.instance.requestQueue
-            val request = JsonArrayRequest(Request.Method.GET,
-                    UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_CANDIDATES + UrlEndPoints.URL_CHAR_QUESTION + UrlEndPoints.POLL_ID + poll.id,
-                    null, Response.Listener<JSONArray>
-            { response ->
-                Parser.parseJsonGetCandidates(response, poll, adapter)
-            }, Response.ErrorListener
-            { error ->
-                Toast.makeText(MyApplication.appContext, error.toString(), Toast.LENGTH_LONG).show()
-            })
-            mRequestQueue.add(request)
-        }
+//        fun getCandidates(poll: Poll, adapter: RecyclerAdapter)
+//        {
+//
+//            mRequestQueue = VolleySingleton.instance.requestQueue
+//            val request = JsonArrayRequest(Request.Method.GET,
+//                    UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_CANDIDATES + UrlEndPoints.URL_CHAR_QUESTION + UrlEndPoints.POLL_ID + poll.id,
+//                    null, Response.Listener<JSONArray>
+//            { response ->
+//
+//                if (response.length() != 0) Parser.parseJsonGetCandidates(response, poll, adapter)
+//            }, Response.ErrorListener
+//            { error ->
+//                Toast.makeText(MyApplication.appContext, error.toString(), Toast.LENGTH_LONG).show()
+//            })
+//            mRequestQueue.add(request)
+//        }
+
 
         fun getPatter(pollid: String)
         {
