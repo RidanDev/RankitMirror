@@ -1,5 +1,6 @@
 package com.example.gianlucanadirvillalba.mirrorpoll
 
+import android.util.Log
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -20,6 +21,7 @@ class RequestAPI
 
         fun getPolls(adapter: RecyclerAdapter)
         {
+            Log.d(MyApplication.LOG, "getPolls")
             mRequestQueue = VolleySingleton.instance.requestQueue
             val request = JsonArrayRequest(Request.Method.GET,
                     UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_POLLS, null, Response.Listener<JSONArray>
@@ -28,7 +30,7 @@ class RequestAPI
                 MyApplication.success = true
                 MainActivity.onStopProgress()
                 Parser.parseJsonGetPolls(response, adapter)
-                //Log.d(MyApplication.LOG, "ja size ${ja.size}")
+                Log.d(MyApplication.LOG, "getPolls: $response")
 
             }, Response.ErrorListener
             { error ->
@@ -39,22 +41,22 @@ class RequestAPI
             mRequestQueue.add(request)
         }
 
-//        fun getCandidates(poll: Poll, adapter: RecyclerAdapter)
-//        {
-//
-//            mRequestQueue = VolleySingleton.instance.requestQueue
-//            val request = JsonArrayRequest(Request.Method.GET,
-//                    UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_CANDIDATES + UrlEndPoints.URL_CHAR_QUESTION + UrlEndPoints.POLL_ID + poll.id,
-//                    null, Response.Listener<JSONArray>
-//            { response ->
-//
-//                if (response.length() != 0) Parser.parseJsonGetCandidates(response, poll, adapter)
-//            }, Response.ErrorListener
-//            { error ->
-//                Toast.makeText(MyApplication.appContext, error.toString(), Toast.LENGTH_LONG).show()
-//            })
-//            mRequestQueue.add(request)
-//        }
+        fun getCandidates(poll: Poll, adapter: RecyclerAdapter)
+        {
+
+            mRequestQueue = VolleySingleton.instance.requestQueue
+            val request = JsonArrayRequest(Request.Method.GET,
+                    UrlEndPoints.URL_RANKIT + UrlEndPoints.GET_CANDIDATES + UrlEndPoints.URL_CHAR_QUESTION + UrlEndPoints.POLL_ID + poll.id,
+                    null, Response.Listener<JSONArray>
+            { response ->
+
+                if (response.length() != 0) Parser.parseJsonGetCandidates(response, poll, adapter)
+            }, Response.ErrorListener
+            { error ->
+                Toast.makeText(MyApplication.appContext, error.toString(), Toast.LENGTH_LONG).show()
+            })
+            mRequestQueue.add(request)
+        }
 
 
         fun getPatter(pollid: String)

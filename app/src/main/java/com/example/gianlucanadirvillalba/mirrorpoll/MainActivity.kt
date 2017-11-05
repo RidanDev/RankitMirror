@@ -3,16 +3,19 @@ package com.example.gianlucanadirvillalba.mirrorpoll
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import com.estimote.coresdk.common.config.EstimoteSDK
+import com.estimote.coresdk.common.requirements.SystemRequirementsChecker
 
 class MainActivity : AppCompatActivity()
 {
@@ -21,14 +24,17 @@ class MainActivity : AppCompatActivity()
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mLinearLayoutManager: LinearLayoutManager
     private lateinit var mSwipeRefreshLayout: android.support.v4.widget.SwipeRefreshLayout
-    private var mCardView : CardView? = null
+    private lateinit var mFloatingActionButton: FloatingActionButton
+    private lateinit var mSendButton: Button
+    private lateinit var mLayoutInflater : LayoutInflater
+    //private var mCardView: CardView? = null
     private var twice = false
 
     companion object
     {
         private val APP_ID: String = "mirror-poll-1de"
         private val APP_TOKEN: String = "8edcf6fe47305e1f61714a4dbb037951"
-        private lateinit var mProgressBar: View
+        lateinit var mProgressBar: View
 
         fun onStopProgress()
         {
@@ -49,7 +55,7 @@ class MainActivity : AppCompatActivity()
         {
             RequestAPI.getPolls(mAdapter)
             //TaskLoadPoll(mAdapter).execute()
-        } else onStopProgress()
+        } else onStopProgress() //blocca animazione rotazione(?)
     }
 
     private fun setUpRecyclerView()
@@ -71,25 +77,41 @@ class MainActivity : AppCompatActivity()
                 MyApplication.success = false
             }
         }
+        mFloatingActionButton.setOnClickListener {
+            val intent = packageManager.getLaunchIntentForPackage("sapienza.informatica.rankit")
+            startActivity(intent)
+        }
+
+
+//        mSendButton.setOnClickListener {
+//            Log.d(MyApplication.LOG, "onSend")
+//        }
+
 
     }
 
     private fun setUpUI()
     {
-        //mToolbar = findViewById(R.id.app_bar) as android.support.v7.widget.Toolbar
+        //mLayoutInflater = layoutInflater
         mToolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(mToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(false) //non mostrare tasto back
         mProgressBar = findViewById(R.id.loadingPanel)
         mRecyclerView = findViewById(R.id.poll_list) as RecyclerView
-        mCardView = (findViewById(R.id.card_view) as CardView?)
-        //mCardView?.cardElevation  = 100F
+        //mCardView = (findViewById(R.id.card_view) as CardView?)
+        mFloatingActionButton = findViewById(R.id.fab) as FloatingActionButton
+        //var buttonView = layoutInflater.inflate(R.layout.custom_list_poll, null)
+        //mSendButton = buttonView.findViewById(R.id.send_button) as Button
+
+        //mSendButton = findViewById(R.id.send_button) as Button?
+
+
     }
 
     override fun onResume()
     {
         super.onResume()
-        //SystemRequirementsChecker.checkWithDefaultDialogs(this)
+        SystemRequirementsChecker.checkWithDefaultDialogs(this)
     }
 
     override fun onBackPressed()

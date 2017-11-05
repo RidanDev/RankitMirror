@@ -3,14 +3,24 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <!--item name="colorPrimary">@color/colorPrimary</item-->
+        <!--item name="colorPrimaryDark">@color/colorPrimaryDark</item-->
+        <!--item name="colorAccent">@color/colorAccent</item-->
+        <item name="colorPrimary">#30286B</item>
+        <item name="colorPrimaryDark">#00003f</item>
+        <item name="colorAccent">#00003f</item>
     </style>
 
     <style name="TextAppearance.AppCompat.Title2">
         <item name="android:textSize">@dimen/abc_text_size_title_material</item>
         <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="PrimaryFlatButton" parent="Theme.AppCompat.Light">
+        <item name="android:buttonStyle">
+            @style/Widget.AppCompat.Button.Borderless.Colored
+        </item>
+        <item name="colorAccent">#FFAB40</item>
     </style>
 
 </resources>

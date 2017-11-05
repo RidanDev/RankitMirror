@@ -1,5 +1,7 @@
 package com.example.gianlucanadirvillalba.mirrorpoll
 
+import android.util.Log
+import android.view.View
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -17,7 +19,7 @@ class Parser
 
         fun parseJsonGetPolls(response: JSONArray, adapter: RecyclerAdapter)
         {
-            //Log.d(MyApplication.LOG, "parseJsonGetPolls")
+            Log.d(MyApplication.LOG, "parseJsonGetPolls")
             var jsonObject: JSONObject
             var i = 0
             while (i < response.length())
@@ -30,44 +32,30 @@ class Parser
                     poll.id = jsonObject.getString("pollid")
                     poll.votes = jsonObject.getString("votes")
                     poll.image = jsonObject.getString("pollimage")
-                    //RequestAPI.getCandidates(poll, adapter)
-                    //Log.d(MyApplication.LOG, poll.toString())
                     pollArray.add(poll)
                 }
                 i++
             }
-
-
-//            for (p in pollArray)
-//            {
-//                Log.d(MyApplication.LOG, "for loop")
-//                RequestAPI.getCandidates(p, adapter)
-//            }
             for (p in pollArray) TaskLoadPoll(adapter, p).execute()
-
-
+            //adapter.onAddPoll(pollArray)
+            //Log.d(MyApplication.LOG, "LOAD FINISHED")
+            MainActivity.mProgressBar.visibility = View.GONE
+            //TaskLoadPoll2(adapter, pollArray);
         }
 
         fun parseJsonGetCandidates(response: JSONArray, poll: Poll, adapter: RecyclerAdapter)
         {
+            Log.d(MyApplication.LOG, "parseJsonGetCandidates")
             var jsonObject: JSONObject
             var i = 0
-//            if (response.length() == 0)
-//            {
-//                pollArray.remove(poll)
-//                adapter.notifyDataSetChanged()
-//            } else
-
 
             while (i < response.length())
             {
                 jsonObject = response.getJSONObject(i)
-                poll.candidates.add(jsonObject.getString("candname").toString())
+                poll.candidates.add("${i + 1}  ${jsonObject.getString("candname")}\n")
                 i++
             }
-            adapter.addNewData(adapter, poll) //perdo l'ordine
-            //adapter.onAddPoll(pollArray)  //si vede l'eliminazione del poll nella schermata
-
+            adapter.addNewData(adapter, poll)
         }
 
         //TODO mi serve un metodo per estrarre l'ordine dei candidati dal pattern (javascript o android?)

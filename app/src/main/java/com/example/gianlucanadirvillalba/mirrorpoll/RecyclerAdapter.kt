@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.squareup.picasso.Picasso
 
 
@@ -34,7 +35,7 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
     {
         data.add(newData)
         instance.notifyItemChanged(0, data.size)
-        instance.notifyDataSetChanged() //aggiunto per non far crashare l'app a quando ho aggiungto lo swiperefreshlayout nel coordinator
+        instance.notifyDataSetChanged() //aggiunto per non far crashare l'app a quando ho aggiunto lo swiperefreshlayout nel coordinator
     }
 
     override fun onBindViewHolder(holder: PollsHolder?, position: Int)
@@ -42,16 +43,15 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
         val poll = data[position]
         holder?.textName?.text = poll.name
         holder?.textVotes?.text = "voti ${poll.votes}"
-        //if (poll.candidates.size == 0) holder?.textCandidates?.text = "nessun candidato"
         val candidates = poll.candidates.toString()
-        holder?.textCandidates?.text = candidates.substring(1, candidates.length-1)
+        holder?.textCandidates?.text = candidates.substring(1, candidates.length-1).replace(", ", "")
         if (poll.image.isNotEmpty())
         {
             Picasso.with(MyApplication.appContext)
                     .load(poll.image)
                     .placeholder(ContextCompat.getDrawable(MyApplication.appContext, R.mipmap.ic_mirror))
-                    .resize(140, 140)
-                    .centerInside()
+                    //.resize(100, 100)
+                    //.centerInside()
                     .into(holder?.pollImage)
         }
 
@@ -85,11 +85,13 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
 
         override fun onClick(p0: View?)
         {
-            //Toast.makeText(MyApplication.appContext, "Sending poll ${data[adapterPosition].name}", Toast.LENGTH_SHORT).show()
-            if (p0?.findViewById(R.id.candidates)?.visibility == View.GONE)
-                p0?.findViewById(R.id.candidates)?.visibility = View.VISIBLE
-            else p0?.findViewById(R.id.candidates)?.visibility = View.GONE
-            //MyApplication.sendToMirror(data[adapterPosition])
+            Toast.makeText(MyApplication.appContext, "Sending poll ${data[adapterPosition].name}", Toast.LENGTH_SHORT).show()
+
+//            if (p0?.findViewById(R.id.candidates)?.visibility == View.GONE)
+//                p0?.findViewById(R.id.candidates)?.visibility = View.VISIBLE
+//            else p0?.findViewById(R.id.candidates)?.visibility = View.GONE
+
+            MyApplication.sendToMirror(data[adapterPosition]) //invio dati al mirror
         }
     }
 
