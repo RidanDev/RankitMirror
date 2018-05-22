@@ -1,5 +1,6 @@
 package com.example.gianlucanadirvillalba.mirrorpoll
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
@@ -35,6 +36,7 @@ class MyApplication : Application()
 
         var success = false
 
+        @SuppressLint("StaticFieldLeak")
         private lateinit var ctxMr: MirrorContextManager
 
         var received = true
@@ -46,6 +48,10 @@ class MyApplication : Application()
             dictionary.template = "pollsapienza"
             dictionary.put("pollname", poll.name)
             dictionary.put("pollid", poll.id)
+            dictionary.put("deadline", poll.deadline)
+            dictionary.put("updated", poll.updated)
+            dictionary.put("image", poll.image)
+            Log.d(MyApplication.LOG, "pollname: ${poll.name}")
             for (i in poll.candidates.indices) dictionary.put("candidate${i + 1}", poll.candidates[i])
 
             ctxMr.display(dictionary, Zone.WHEREVER_YOU_ARE, object : DisplayCallback
@@ -76,6 +82,4 @@ class MyApplication : Application()
 
         }
     }
-
-
 }

@@ -17,6 +17,7 @@ import android.widget.Toast
 import com.estimote.coresdk.common.config.EstimoteSDK
 import com.estimote.coresdk.common.requirements.SystemRequirementsChecker
 
+//TODO mostrare i candidati sulle card direttamente ordinati con il pattern fornito
 class MainActivity : AppCompatActivity()
 {
     private lateinit var mToolbar: android.support.v7.widget.Toolbar
@@ -47,6 +48,13 @@ class MainActivity : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity2)
+
+//        MirrorClient.Builder(MyApplication.appContext)
+//                .useMirrorWithIds("7ad83a1b886ae2e6321319c38c48fd11")
+//                .setDebugModeEnabled(true)
+//                .setRepeatableDisplayRequests(true)
+//                .build()
+
         EstimoteSDK.initialize(this, APP_ID, APP_TOKEN)
         EstimoteSDK.enableDebugLogging(true)
         setUpUI()
@@ -62,7 +70,7 @@ class MainActivity : AppCompatActivity()
     {
         mAdapter = RecyclerAdapter(this)
         mLinearLayoutManager = LinearLayoutManager(this)
-        mRecyclerView.layoutManager = mLinearLayoutManager
+        mRecyclerView.layoutManager = mLinearLayoutManager as RecyclerView.LayoutManager?
         mRecyclerView.adapter = mAdapter
         mRecyclerView.isNestedScrollingEnabled = false //permette lo scroll fluido
         //mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout

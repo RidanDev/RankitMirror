@@ -10,6 +10,8 @@ class Poll
     lateinit var votes : String
     lateinit var pattern : String
     lateinit var image : String
+    lateinit var deadline : String
+    lateinit var updated : String
     var candidates = ArrayList<String>()
 
     override fun toString(): String = "id: $id, name: $name, votes: $votes, image: $image"

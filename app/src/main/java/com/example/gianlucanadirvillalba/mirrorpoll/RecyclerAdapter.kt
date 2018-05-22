@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso
  */
 class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.PollsHolder>(), PollListener
 {
+
     private lateinit var mContext: Context
     private var mLayoutInflater = LayoutInflater.from(context)
 
@@ -38,7 +39,7 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
         instance.notifyDataSetChanged() //aggiunto per non far crashare l'app a quando ho aggiunto lo swiperefreshlayout nel coordinator
     }
 
-    override fun onBindViewHolder(holder: PollsHolder?, position: Int)
+    override fun onBindViewHolder(holder: PollsHolder, position: Int)
     {
         val poll = data[position]
         holder?.textName?.text = poll.name
@@ -55,14 +56,15 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<RecyclerAdapter.P
                     .into(holder?.pollImage)
         }
 
-
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PollsHolder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PollsHolder
     {
         val view = mLayoutInflater.inflate(R.layout.custom_list_poll, parent, false)
         return PollsHolder(view)
     }
+
+
 
     override fun getItemCount(): Int = data.size
 

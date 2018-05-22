@@ -32,6 +32,8 @@ class Parser
                     poll.id = jsonObject.getString("pollid")
                     poll.votes = jsonObject.getString("votes")
                     poll.image = jsonObject.getString("pollimage")
+                    poll.deadline = jsonObject.getString("deadline")
+                    poll.updated = jsonObject.getString("updated")
                     pollArray.add(poll)
                 }
                 i++
@@ -52,7 +54,7 @@ class Parser
             while (i < response.length())
             {
                 jsonObject = response.getJSONObject(i)
-                poll.candidates.add("${i + 1}  ${jsonObject.getString("candname")}\n")
+                poll.candidates.add("${jsonObject.getString("candname")}\n")
                 i++
             }
             adapter.addNewData(adapter, poll)
